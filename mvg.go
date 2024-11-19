@@ -8,7 +8,7 @@ import (
 // Single map for substitutions (uppercase and lowercase combined)
 var customAlphabet = map[rune]rune{
 	'A': 'Δ', 'D': 'Đ', 'E': 'Σ', 'F': 'Ϝ',
-	'J': 'J', 'N': 'Ŋ', 'O': 'Ø', 'S': 'Ϟ',
+	'J': 'J', 'N': 'Ͷ', 'O': 'Ø', 'S': 'Ϟ',
 	'T': 'Ͳ', 'a': 'α', 'c': 'ϲ', 'd': 'ɗ',
 	'f': 'ϝ', 'j': 'ʝ', 'm': 'ϻ', 'n': 'η',
 	'o': 'o', 's': 'ϟ', 'u': 'υ', 'v': 'v',

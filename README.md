@@ -3,6 +3,10 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/hajisml/mvg-fontifier)](https://goreportcard.com/report/github.com/hajisml/mvg-fontifier)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
+> "We are not the same, I'm a Martian." — *lil Wayne*
+> 
+> **ϻvg** stands for **Martians Vs Goblins**.
+
 A text transformation utility that stylizes Latin characters using a custom mapping of Greek and mathematical symbols.
 
 ## ✨ Features

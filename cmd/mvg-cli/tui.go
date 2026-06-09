@@ -96,23 +96,21 @@ func (m model) View() string {
 		status = lipgloss.NewStyle().Foreground(lipgloss.Color("8")).Render("Ctrl+S: Copy | Esc: Quit")
 	}
 
-	// Main content container
-	contentStyle := lipgloss.NewStyle().PaddingLeft(2)
+	// Update textarea cursor/bar color if flashing
 	if m.flashing {
-		// "Pinkish red" flash on the left margin
-		contentStyle = contentStyle.Border(lipgloss.NormalBorder(), false, false, false, true).
-			BorderForeground(lipgloss.Color("#FF007F")). // Hot Pink / Pinkish Red
-			PaddingLeft(1)
+		m.textarea.Cursor.Style = lipgloss.NewStyle().Foreground(lipgloss.Color("#FF007F"))
+		m.textarea.FocusedStyle.CursorLine = lipgloss.NewStyle().Foreground(lipgloss.Color("#FF007F"))
+	} else {
+		m.textarea.Cursor.Style = lipgloss.NewStyle().Foreground(lipgloss.Color("212"))
+		m.textarea.FocusedStyle.CursorLine = lipgloss.NewStyle()
 	}
 
-	content := fmt.Sprintf(
+	return fmt.Sprintf(
 		"Enter text to transform:\n\n%s\n\nResult:\n\n%s\n\n%s",
 		m.textarea.View(),
 		lipgloss.NewStyle().Foreground(lipgloss.Color("12")).Render(transformed),
 		status,
-	)
-
-	return contentStyle.Render(content) + "\n"
+	) + "\n"
 }
 
 func runTUI() error {

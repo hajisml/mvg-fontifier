@@ -42,6 +42,11 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	var cmd tea.Cmd
 
 	switch msg := msg.(type) {
+	case tea.WindowSizeMsg:
+		m.textarea.SetWidth(msg.Width)
+		m.textarea.SetHeight(msg.Height / 3) // Give textarea about a third of the height
+		return m, nil
+
 	case tea.KeyMsg:
 		switch msg.Type {
 		case tea.KeyCtrlC, tea.KeyEsc:
@@ -103,10 +108,16 @@ func (m model) View() string {
 		m.textarea.FocusedStyle.Prompt = lipgloss.NewStyle().Foreground(lipgloss.Color("212"))
 	}
 
+	// Wrap the transformed text to match the textarea width
+	// textarea.Width() returns the width of the input area.
+	resultStyle := lipgloss.NewStyle().
+		Foreground(lipgloss.Color("12")).
+		Width(m.textarea.Width())
+
 	return fmt.Sprintf(
 		"Enter text to transform:\n\n%s\n\nResult:\n\n%s\n\n%s",
 		m.textarea.View(),
-		lipgloss.NewStyle().Foreground(lipgloss.Color("12")).Render(transformed),
+		resultStyle.Render(transformed),
 		status,
 	) + "\n"
 }

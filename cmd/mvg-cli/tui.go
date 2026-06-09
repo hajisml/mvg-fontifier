@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"mvg-fontifier/internal/transformer"
+	"time"
 
 	"github.com/atotto/clipboard"
 	"github.com/charmbracelet/bubbles/textarea"
@@ -10,10 +11,13 @@ import (
 	"github.com/charmbracelet/lipgloss"
 )
 
+type flashMsg struct{}
+
 type model struct {
 	textarea textarea.Model
 	err      error
 	copied   bool
+	flashing bool
 }
 
 func initialModel() model {
@@ -25,6 +29,7 @@ func initialModel() model {
 		textarea: ti,
 		err:      nil,
 		copied:   false,
+		flashing: false,
 	}
 }
 
@@ -49,9 +54,18 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				m.err = err
 			} else {
 				m.copied = true
+				m.flashing = true
+				// Reset flashing after 500ms
+				cmds = append(cmds, tea.Tick(time.Millisecond*500, func(t time.Time) tea.Msg {
+					return flashMsg{}
+				}))
 			}
-			return m, nil
+			return m, tea.Batch(cmds...)
 		}
+
+	case flashMsg:
+		m.flashing = false
+		return m, nil
 
 	// We handle errors just like any other message
 	case error:
@@ -82,12 +96,23 @@ func (m model) View() string {
 		status = lipgloss.NewStyle().Foreground(lipgloss.Color("8")).Render("Ctrl+S: Copy | Esc: Quit")
 	}
 
-	return fmt.Sprintf(
+	// Main content container
+	contentStyle := lipgloss.NewStyle().PaddingLeft(2)
+	if m.flashing {
+		// "Pinkish red" flash on the left margin
+		contentStyle = contentStyle.Border(lipgloss.NormalBorder(), false, false, false, true).
+			BorderForeground(lipgloss.Color("#FF007F")). // Hot Pink / Pinkish Red
+			PaddingLeft(1)
+	}
+
+	content := fmt.Sprintf(
 		"Enter text to transform:\n\n%s\n\nResult:\n\n%s\n\n%s",
 		m.textarea.View(),
 		lipgloss.NewStyle().Foreground(lipgloss.Color("12")).Render(transformed),
 		status,
-	) + "\n"
+	)
+
+	return contentStyle.Render(content) + "\n"
 }
 
 func runTUI() error {

@@ -98,9 +98,9 @@ func (m model) View() string {
 
 	// Update textarea prompt/bar color if flashing
 	if m.flashing {
-		m.textarea.PromptStyle = lipgloss.NewStyle().Foreground(lipgloss.Color("#FF007F"))
+		m.textarea.FocusedStyle.Prompt = lipgloss.NewStyle().Foreground(lipgloss.Color("#FF007F"))
 	} else {
-		m.textarea.PromptStyle = lipgloss.NewStyle().Foreground(lipgloss.Color("212"))
+		m.textarea.FocusedStyle.Prompt = lipgloss.NewStyle().Foreground(lipgloss.Color("212"))
 	}
 
 	return fmt.Sprintf(

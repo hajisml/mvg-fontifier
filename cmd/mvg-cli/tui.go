@@ -96,13 +96,11 @@ func (m model) View() string {
 		status = lipgloss.NewStyle().Foreground(lipgloss.Color("8")).Render("Ctrl+S: Copy | Esc: Quit")
 	}
 
-	// Update textarea cursor/bar color if flashing
+	// Update textarea prompt/bar color if flashing
 	if m.flashing {
-		m.textarea.Cursor.Style = lipgloss.NewStyle().Foreground(lipgloss.Color("#FF007F"))
-		m.textarea.FocusedStyle.CursorLine = lipgloss.NewStyle().Foreground(lipgloss.Color("#FF007F"))
+		m.textarea.PromptStyle = lipgloss.NewStyle().Foreground(lipgloss.Color("#FF007F"))
 	} else {
-		m.textarea.Cursor.Style = lipgloss.NewStyle().Foreground(lipgloss.Color("212"))
-		m.textarea.FocusedStyle.CursorLine = lipgloss.NewStyle()
+		m.textarea.PromptStyle = lipgloss.NewStyle().Foreground(lipgloss.Color("212"))
 	}
 
 	return fmt.Sprintf(
